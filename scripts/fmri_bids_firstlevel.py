@@ -4,7 +4,7 @@ Usage:
     fmri_bids_first make [options] <bids_dir> <model> [<out_dir>]
 
 -t <transformations>    Transformation JSON spec to apply.
--p <pliers>             Pliers JSON spec of features to extract.
+-p <pliers_graph>       Pliers JSON spec of features to extract.
 -s <subject_id>         Subjects to analyze. [default: all]
 -r <run_ids>            Runs to analyze. [default: all]
 -w <work_dir>           Working directory.
@@ -35,7 +35,7 @@ def validate_arguments(args):
     var_names = {'<out_dir>': 'out_dir',
                  '<in_dir>': 'in_dir',
                  '<bids_dir>' : 'bids_dir',
-                 '<pliers>' : 'pliers',
+                 '<pliers_graph>' : 'pliers_graph',
                  '<transformations>' :'transformations',
                  '-w': 'work_dir',
                  '-s': 'subjects',
@@ -107,7 +107,8 @@ def validate_arguments(args):
     return args
 
 def create_first_level(in_dir, subjects, runs, contrasts, mask=None,
-                       out_dir=None, work_dir=None, transformations=None, TR=1):
+                       out_dir=None, work_dir=None, transformations=None,
+                       pliers_graph=None, TR=1):
     """
     Set up workflow
     """
@@ -148,16 +149,24 @@ def create_first_level(in_dir, subjects, runs, contrasts, mask=None,
         """ Get a subject's event files """
         from bids.grabbids import BIDSLayout
         layout = BIDSLayout(bids_dir)
-        event_files = [layout.get(
+        events = [layout.get(
             type='events', return_type='file', subject=subject_id, run=r, task=task)[0] for r in runs]
-        return event_files
+        return events
 
-    events_getter = Node(name='events_getter', interface=Function(
+    events_getter = Node(name='events', interface=Function(
         input_names=['bids_dir', 'subject_id', 'runs', 'task'],
         output_names=['events'], function=_get_events))
     events_getter.inputs.runs = arguments['runs']
-    events_getter.inputs.bids_dir = arguments['<bids_dir>']
+    events_getter.inputs.bids_dir = arguments['bids_dir']
     events_getter.inputs.task = arguments['task']
+
+    """
+    Extract features using pliers and add to events.tsv.
+    """
+
+    pliers_extract = Node(interface=pliers.PliersInterface(), name='pliers')
+    if pliers_graph is not None:
+        pliers_extract.inputs.graph_sec = pliers_graph
 
     """
     Specify model, apply transformations and specify fMRI model
@@ -177,7 +186,8 @@ def create_first_level(in_dir, subjects, runs, contrasts, mask=None,
 
     wf.connect([(infosource, datasource, [('subject_id', 'subject_id')]),
                 (infosource, events_getter, [('subject_id', 'subject_id')]),
-                (events_getter, eventspec, [('events', 'bids_events')]),
+                (events_getter, pliers_extract, [('events', 'events')]),
+                (pliers_extract, eventspec, [('events', 'events')]),
                 (datasource, modelspec, [('func', 'functional_runs')]),
                 (eventspec, modelspec, [('subject_info', 'subject_info')])])
 
