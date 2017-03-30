@@ -9,13 +9,12 @@ bids_dir = os.path.abspath('/home/zorro/datasets/ds009')
 task = 'emotionalregulation'
 run = ['run-01']
 subject = '01'
-json_spec = 'test_spec.json'
+json_spec = '/home/zorro/repos/neuroscout/scripts/test_spec.json'
 
 """
 Set up workflow
 """
 wf = Workflow(name='first_level')
-wf.work_dir = '/tmp/pliers_test'
 
 """
 Get event files
@@ -45,6 +44,6 @@ set of new event files.
 
 pliers_extract = Node(interface=pliers.PliersInterface(), name='pliers')
 pliers_extract.inputs.graph_spec = json_spec
-
+pliers_extract.inputs.bids_directory = bids_dir
 wf.connect(events_getter, 'events', pliers_extract, 'event_files')
 wf.run()
