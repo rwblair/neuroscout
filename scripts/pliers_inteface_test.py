@@ -5,10 +5,11 @@ from nipype.interfaces.utility import Function
 
 import os
 
-bids_dir = os.path.abspath('~/datasets/ds009')
-task = 'emotionalrecognition'
-run = 'run-01'
+bids_dir = os.path.abspath('/home/zorro/datasets/ds009')
+task = 'emotionalregulation'
+run = ['run-01']
 subject = '01'
+json_spec = 'test_spec.json'
 
 """
 Set up workflow
@@ -34,6 +35,8 @@ events_getter = Node(name='events', interface=Function(
 events_getter.inputs.runs = run
 events_getter.inputs.bids_dir = bids_dir
 events_getter.inputs.task = task
+events_getter.inputs.subject_id = subject
+
 
 """
 Extract features, for a given set of subjects, etc and write out a
@@ -41,8 +44,7 @@ set of new event files.
 """
 
 pliers_extract = Node(interface=pliers.PliersInterface(), name='pliers')
-pliers_extract.inputs.graph_spec = 'test_graph_path.json'
-
+pliers_extract.inputs.graph_spec = json_spec
 
 wf.connect(events_getter, 'events', pliers_extract, 'event_files')
 wf.run()

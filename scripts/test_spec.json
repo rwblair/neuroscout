@@ -1,0 +1,7 @@
+{
+    "roots": [
+        {
+           "transformer":"GoogleVisionAPIFaceExtractor"
+        }
+    ]
+}
