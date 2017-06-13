@@ -26,9 +26,10 @@ from nipype.workflows.fmri.fsl import (create_modelfit_workflow,
 #            execution={'stop_on_first_crash': True})
 # config.update_config(cfg)
 
-subjects = ['102311', '104416', '105923', '146129', '146432', '150423', '155938', '203418', '209228', '573249']
+# subjects = ['102311', '104416', '105923', '146129', '146432', '150423', '155938', '203418', '209228', '573249']
+subjects = ['214019', '283543', '547046']
 out_dir = '/mnt/d/neuroscout/analyses/hcp/kdd_fx'
-in_dir = '/tmp/first_level/modelfit'
+in_dir = '/tmp/kdd/first_level/modelfit'
 runs = ['1', '2', '3', '4']
 jobs = 5
 conditions = ['street', 'outdoors', 'light', 'adult', 'sentiment',
