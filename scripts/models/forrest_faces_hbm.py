@@ -84,11 +84,10 @@ class AllFeatures(FirstLevelBIDS2):
     def validate_arguments(self, args):
         super(AllFeatures, self).validate_arguments(args)
 
-        ### TODO: EDIT THIS!!!!
         self.field_template = dict(
-            func='downsample/3/downsampled_func/%s/tfMRI_MOVIE%s*[AP]_flirt.nii.gz')
+            func='derivatives/studyforrest-data/aligned/sub-%s/in_bold3tp2/sub-%s_task-avmovie_run-%s_bold.nii.gz')
         self.template_args = dict(
-            func=[['subject_id', 'runs']])
+            func=[['subject_id', 'subject_id', 'runs']])
 
 
         conditions = ['street', 'outdoors', 'light', 'adult', 'sentiment',
