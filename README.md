@@ -27,7 +27,7 @@ The server should now be running at http://localhost/
 Next, initialize, migrate and upgrade the database migrations. This script will
 also add a test user.
 
-    docker-compose exec neuroscout bash init_reset.sh
+    docker-compose exec neuroscout bash scripts/init_reset.sh
 
 
 ## Maintaining docker image and db
