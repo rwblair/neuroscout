@@ -92,7 +92,7 @@ export class OverviewTab extends React.Component<OverviewTabProps, any> {
     };
 
     const runColumns = [
-      { title: 'ID', dataIndex: 'id' },
+      { title: 'Run ID', dataIndex: 'number' },
       { title: 'Subject', dataIndex: 'subject' },
       { title: 'Session', dataIndex: 'session' }
     ];
