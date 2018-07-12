@@ -31,6 +31,7 @@ export interface Dataset {
   authors: string;
   url: string;
   description: string;
+  runs: number;
 }
 
 export interface Run {
@@ -90,7 +91,7 @@ export interface Transformation {
   rescale?: boolean;
   other?: string[];
 }
- 
+
 // Lookup hash of available transformations (as specified in transforms.ts) by their name
 export interface XformRules {
   [name: string]: Transformation;
@@ -139,7 +140,9 @@ export interface ApiDataset {
     Authors: string[];
     Description: string;
     URL: string;
+    Name: string;
   };
+  runs: any[];
 }
 
 export interface ApiRun {

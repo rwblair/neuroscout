@@ -56,11 +56,10 @@ export class OverviewTab extends React.Component<OverviewTabProps, any> {
       {
         title: 'Name',
         dataIndex: 'name',
-        width: 100,
-        sorter: (a, b) => a.name.localeCompare(b.name)
+        sorter: (a, b) => a.name.localeCompare(b.name),
       },
-      { title: 'Description', dataIndex: 'description', width: 100 },
-      { title: 'Author(s)', dataIndex: 'authors', width: 100 },
+      { title: 'Number of Runs', dataIndex: 'runs'},
+      { title: 'Author(s)', dataIndex: 'authors'},
     ];
 
     const selectedDatasetId: string[] = analysis.datasetId ? [analysis.datasetId.toString()] : [];
@@ -84,10 +83,9 @@ export class OverviewTab extends React.Component<OverviewTabProps, any> {
 
     const taskColumns = [
       { title: 'Name', dataIndex: 'name', sorter: (a, b) => a.name.localeCompare(b.name)},
-
       { title: 'Description', dataIndex: 'description' },
       {
-        title: '#Runs',
+        title: 'Number of Runs',
         dataIndex: 'numRuns',
         sorter: (a, b) => a.numRuns - b.numRuns
       }

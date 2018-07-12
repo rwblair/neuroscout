@@ -132,8 +132,9 @@ const normalizeDataset = (d: ApiDataset): Dataset => {
   const description = d.description.Description;
   const url = d.description.URL;
   const id = d.id.toString();
-  const { name } = d;
-  return { id, name, authors, url, description };
+  const runs = d.runs.length;
+  const name = d.description.Name;
+  return { id, name, authors, url, description, runs };
 };
 
 // Get array of unique tasks from a list of runs, and count the number of runs associated with each
